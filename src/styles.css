@@ -152,8 +152,8 @@ html::after {
   pointer-events: none;
   background-image: url("/grain-fine.png"), var(--grain-photo);
   background-repeat: repeat;
-  background-size: 180px 180px;
-  opacity: 0.07;
+  background-size: 220px 220px;
+  opacity: 0.035;
   mix-blend-mode: overlay;
 }
 
@@ -171,7 +171,7 @@ html::after {
   width: 116%;
   height: 116%;
   display: block;
-  opacity: 0.1;
+  opacity: 0.045;
   mix-blend-mode: overlay;
 }
 
@@ -187,9 +187,9 @@ html::after {
   inset: -25%;
   background-image: url("/grain-fine.png"), url("./assets/grain-fine.png"),
     var(--grain-photo);
-  background-size: 180px 180px;
+  background-size: 220px 220px;
   mix-blend-mode: overlay;
-  opacity: 0.18;
+  opacity: 0.08;
   animation: grain-flicker 0.38s steps(1) infinite;
 }
 
@@ -198,9 +198,9 @@ html::after {
   inset: -20%;
   background-image: url("/grain-coarse.png"), url("./assets/grain-coarse.png"),
     var(--grain-photo);
-  background-size: 280px 280px;
+  background-size: 320px 320px;
   mix-blend-mode: overlay;
-  opacity: 0.1;
+  opacity: 0.04;
   animation: grain-flicker 0.62s steps(1) infinite reverse;
 }
 
@@ -208,9 +208,9 @@ html::after {
   position: absolute;
   inset: 0;
   background-image: url("./assets/grain-fine.png"), var(--grain-photo);
-  background-size: 140px 140px;
+  background-size: 180px 180px;
   mix-blend-mode: overlay;
-  opacity: 0.16;
+  opacity: 0.07;
   animation: grain-flicker 0.32s steps(1) infinite;
 }
 
@@ -218,14 +218,14 @@ html::after {
   position: absolute;
   inset: 0;
   background-image: url("./assets/grain-fine.png"), var(--grain-photo);
-  background-size: 140px 140px;
+  background-size: 180px 180px;
   mix-blend-mode: overlay;
-  opacity: 0.22;
+  opacity: 0.1;
   transition: opacity 500ms var(--ease-outlaw);
 }
 
 .media-card:hover .photo-grain {
-  opacity: 0.12;
+  opacity: 0.05;
 }
 
 @keyframes grain-flicker {
