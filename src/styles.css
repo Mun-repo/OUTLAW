@@ -1,0 +1,378 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: #000000;
+  --color-foreground: #f4f0e6;
+  --color-card: #050505;
+  --color-card-foreground: #f4f0e6;
+  --color-popover: #0a0a0a;
+  --color-popover-foreground: #f4f0e6;
+  --color-primary: #f4f0e6;
+  --color-primary-foreground: #000000;
+  --color-secondary: #111111;
+  --color-secondary-foreground: #f4f0e6;
+  --color-muted: #0c0c0c;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #141414;
+  --color-accent-foreground: #f4f0e6;
+  --color-destructive: #b4544a;
+  --color-destructive-foreground: #f4f0e6;
+  --color-border: #27272a;
+  --color-input: #3f3f46;
+  --color-ring: #f4f0e6;
+  --color-bone: #f4f0e6;
+  --color-ink: #000000;
+  --color-pure: #ffffff;
+  --color-taupe: #a1a1aa;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius: 0;
+
+  --tracking-lux: 0.28em;
+  --tracking-display: -0.045em;
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1rem;
+  --ease-outlaw: cubic-bezier(0.22, 1, 0.36, 1);
+  --max-width-ig: 26.5rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: var(--tracking-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+.event-stock {
+  filter: grayscale(1) contrast(1.2) brightness(0.82);
+}
+
+.hero-vignette {
+  background:
+    linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.97) 0%,
+      rgb(0 0 0 / 0.4) 26%,
+      rgb(0 0 0 / 0.18) 52%,
+      rgb(0 0 0 / 0.55) 100%
+    ),
+    radial-gradient(ellipse at center, transparent 24%, rgb(0 0 0 / 0.78) 100%);
+}
+
+/* 35mm-style grain — global analog overlay */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  overflow: hidden;
+  mix-blend-mode: overlay;
+}
+
+.film-grain-fine,
+.film-grain-coarse,
+.hero-grain,
+.photo-grain {
+  pointer-events: none;
+}
+
+.film-grain-fine {
+  position: absolute;
+  inset: -25%;
+  background-image: url("/grain-fine.png");
+  background-size: 160px 160px;
+  animation: grain-flicker 0.38s steps(1) infinite;
+}
+
+.film-grain-coarse {
+  position: absolute;
+  inset: -20%;
+  background-image: url("/grain-coarse.png");
+  background-size: 260px 260px;
+  opacity: 0.45;
+  animation: grain-flicker 0.62s steps(1) infinite reverse;
+}
+
+/* Stronger grain on the hero plate only */
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("/grain-fine.png");
+  background-size: 110px 110px;
+  mix-blend-mode: overlay;
+  animation: grain-flicker 0.32s steps(1) infinite;
+}
+
+.photo-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("/grain-fine.png");
+  background-size: 110px 110px;
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+  transition: opacity 500ms var(--ease-outlaw);
+}
+
+.media-card:hover .photo-grain {
+  opacity: 0.4;
+}
+
+@keyframes grain-flicker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-3.4%, 2.6%, 0);
+  }
+  40% {
+    transform: translate3d(2.8%, -4.2%, 0);
+  }
+  60% {
+    transform: translate3d(-2.2%, 3.8%, 0);
+  }
+  80% {
+    transform: translate3d(4.1%, -1.8%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-logo {
+  width: auto;
+  height: min(48vh, calc(96vw * 0.554));
+  max-width: 96vw;
+  object-fit: contain;
+}
+
+.hero-ghost {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.5rem, 18vw, 16rem);
+  letter-spacing: -0.07em;
+  line-height: 0.78;
+  color: rgb(244 240 230 / 0.055);
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.hero-bg-img {
+  animation: hero-ken 32s var(--ease-outlaw) both;
+}
+
+@keyframes hero-ken {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-logo {
+    height: min(66vh, calc(96vw * 0.554));
+  }
+}
+
+.media-card {
+  border: 1px solid var(--color-border);
+  transition:
+    border-color 280ms var(--ease-outlaw),
+    box-shadow 280ms var(--ease-outlaw);
+}
+
+.media-card:hover {
+  border-color: #3f3f46;
+  box-shadow: 0 0 48px rgb(244 240 230 / 0.08);
+}
+
+.media-card img {
+  transition:
+    transform 800ms var(--ease-outlaw),
+    filter 500ms var(--ease-outlaw);
+}
+
+.media-card:hover img {
+  transform: scale(1.07);
+}
+
+.media-card:hover .event-stock {
+  filter: grayscale(1) contrast(1.35) brightness(0.95);
+}
+
+.media-card.is-ended img,
+.media-card.is-ended .event-stock,
+.media-card.is-ended:hover img,
+.media-card.is-ended:hover .event-stock {
+  filter: grayscale(1) contrast(1.18) brightness(0.48);
+}
+
+.ended-banner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.ended-banner span {
+  position: absolute;
+  top: 42%;
+  left: -18%;
+  width: 136%;
+  padding: 0.55rem 0;
+  background: var(--color-pure);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.05rem, 3.1vw, 1.85rem);
+  letter-spacing: 0.38em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-18deg);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.45);
+}
+
+.feed-index {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.22em;
+}
+
+@keyframes outlaw-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes outlaw-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes outlaw-pulse-line {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scaleY(0.85);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scaleY(1);
+  }
+}
+
+.rise-1 {
+  animation: outlaw-rise 900ms var(--ease-outlaw) both;
+}
+.rise-2 {
+  animation: outlaw-rise 1000ms var(--ease-outlaw) 80ms both;
+}
+.rise-3 {
+  animation: outlaw-rise 900ms var(--ease-outlaw) 220ms both;
+}
+.rise-4 {
+  animation: outlaw-rise 900ms var(--ease-outlaw) 380ms both;
+}
+
+.scroll-cue {
+  animation: outlaw-pulse-line 2.4s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.shake-error {
+  animation: outlaw-shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-1,
+  .rise-2,
+  .rise-3,
+  .rise-4,
+  .shake-error,
+  .scroll-cue,
+  .hero-bg-img,
+  .film-grain-fine,
+  .film-grain-coarse,
+  .hero-grain {
+    animation: none;
+  }
+
+  header {
+    transition: none;
+  }
+
+  .media-card img,
+  .media-card:hover img {
+    transform: none;
+  }
+}
