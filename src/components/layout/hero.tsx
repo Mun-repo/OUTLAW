@@ -9,11 +9,14 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-dvh shrink-0 flex-col items-center justify-center overflow-hidden px-4 py-20 text-center md:px-8">
-      <div className="absolute inset-0 isolate overflow-hidden">
+      <div className="hero-stage absolute inset-0 isolate overflow-hidden">
         <img
           src={HERO_IMAGE}
           alt=""
           className="hero-bg-img event-stock size-full object-cover"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
         />
         <div className="hero-vignette absolute inset-0" />
         <div className="hero-grain" />
