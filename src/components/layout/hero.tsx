@@ -82,7 +82,7 @@ export function Hero() {
         <motion.div
           variants={copy}
           transition={{ duration: 0.8, ease }}
-          className="mt-8 flex flex-col items-center gap-3 md:mt-10"
+          className="relative z-10 mt-10 flex shrink-0 flex-col items-center gap-3 md:mt-12"
         >
           <span className="text-2xs tracking-lux uppercase text-muted-foreground">
             Explorer
