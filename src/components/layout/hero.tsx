@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Logo } from "@/components/logo";
-import { HERO_IMAGE } from "@/lib/stock";
+import { HERO_IMAGE, HERO_PUBLIC } from "@/lib/stock";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -8,16 +8,25 @@ export function Hero() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative flex min-h-dvh shrink-0 flex-col items-center justify-center overflow-hidden px-4 py-20 text-center md:px-8">
-      <div className="hero-stage absolute inset-0 isolate overflow-hidden">
+    <section className="relative flex min-h-dvh shrink-0 flex-col items-center justify-center overflow-hidden px-4 py-16 text-center md:px-8 md:py-20">
+      <div
+        className="hero-stage absolute inset-0 overflow-hidden"
+        style={{
+          backgroundImage: `url(${HERO_PUBLIC}), url(${HERO_IMAGE})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+        }}
+      >
         <img
-          src={HERO_IMAGE}
+          src={HERO_PUBLIC}
           alt=""
-          className="hero-bg-img event-stock size-full object-cover"
+          className="hero-bg-img size-full object-cover"
           fetchPriority="high"
           decoding="async"
           onError={(e) => {
-            e.currentTarget.style.display = "none";
+            if (e.currentTarget.src.endsWith(HERO_PUBLIC)) {
+              e.currentTarget.src = HERO_IMAGE;
+            }
           }}
         />
         <div className="hero-vignette absolute inset-0" />
@@ -26,13 +35,13 @@ export function Hero() {
 
       <p
         aria-hidden="true"
-        className="hero-ghost absolute inset-x-0 top-1/2 -translate-y-[58%] text-center"
+        className="hero-ghost pointer-events-none absolute inset-x-0 top-[18%] text-center md:top-[14%]"
       >
         OUTLAW
       </p>
 
       <motion.div
-        className="relative z-10 flex w-full flex-col items-center"
+        className="relative z-10 flex w-full max-w-4xl flex-col items-center"
         initial={reduce ? false : "hidden"}
         animate="visible"
         variants={{
@@ -59,28 +68,27 @@ export function Hero() {
         <motion.div
           variants={copy}
           transition={{ duration: 0.9, ease }}
-          className="mx-auto mt-6 h-px w-16 bg-foreground/40 md:mt-8"
+          className="mx-auto mt-5 h-px w-16 bg-foreground/40 md:mt-7"
         />
 
         <motion.p
           variants={copy}
           transition={{ duration: 0.95, ease }}
-          className="mt-6 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:text-3xl lg:text-4xl md:mt-8"
+          className="mt-5 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:mt-7 md:text-3xl lg:text-4xl"
         >
           Ceux qui tracent leur propre route.
         </motion.p>
-      </motion.div>
 
-      <motion.div
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1, duration: 0.8, ease }}
-        className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex flex-col items-center gap-3 md:bottom-10"
-      >
-        <span className="text-2xs tracking-lux uppercase text-muted-foreground">
-          Explorer
-        </span>
-        <span className="scroll-cue h-10 w-px bg-foreground/50" />
+        <motion.div
+          variants={copy}
+          transition={{ duration: 0.8, ease }}
+          className="mt-8 flex flex-col items-center gap-3 md:mt-10"
+        >
+          <span className="text-2xs tracking-lux uppercase text-muted-foreground">
+            Explorer
+          </span>
+          <span className="scroll-cue h-10 w-px bg-foreground/50" />
+        </motion.div>
       </motion.div>
     </section>
   );

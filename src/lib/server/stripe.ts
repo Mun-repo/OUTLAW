@@ -4,6 +4,12 @@ import { env, isWorkspacePreview } from "@/lib/env.server";
 export function getStripe() {
   const key = env("STRIPE_SECRET_KEY");
   if (!key) return null;
+  if (key.startsWith("rk_")) {
+    console.error(
+      "[stripe] STRIPE_SECRET_KEY is a restricted key (rk_). Checkout needs sk_test_ or sk_live_.",
+    );
+    return null;
+  }
   return new Stripe(key);
 }
 

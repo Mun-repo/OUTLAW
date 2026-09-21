@@ -87,20 +87,24 @@
   }
 }
 
+.event-live {
+  filter: saturate(1.06) contrast(1.04);
+}
+
 .event-stock {
-  filter: grayscale(1) contrast(1.2) brightness(0.82);
+  filter: grayscale(1) contrast(1.18) brightness(0.5);
 }
 
 .hero-vignette {
   background:
     linear-gradient(
       to top,
-      rgb(0 0 0 / 0.97) 0%,
-      rgb(0 0 0 / 0.4) 26%,
-      rgb(0 0 0 / 0.18) 52%,
-      rgb(0 0 0 / 0.55) 100%
+      rgb(0 0 0 / 0.72) 0%,
+      rgb(0 0 0 / 0.16) 24%,
+      rgb(0 0 0 / 0.06) 52%,
+      rgb(0 0 0 / 0.28) 100%
     ),
-    radial-gradient(ellipse at center, transparent 24%, rgb(0 0 0 / 0.78) 100%);
+    radial-gradient(ellipse at center, transparent 48%, rgb(0 0 0 / 0.38) 100%);
 }
 
 /*
@@ -109,24 +113,20 @@
  */
 .hero-stage {
   background-color: #050505;
+  background-image: url("/hero.jpg");
+  background-size: cover;
+  background-position: center 40%;
 }
 
 .hero-stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image: url("./assets/hero.jpg");
-  background-size: cover;
-  background-position: center 42%;
-  filter: grayscale(1) contrast(1.22) brightness(0.78);
-  transform: scale(1.04);
-  animation: hero-ken 32s var(--ease-outlaw) both;
+  content: none;
 }
 
 .hero-bg-img {
   position: relative;
   z-index: 1;
+  object-position: center 40%;
+  filter: grayscale(0.35) contrast(1.05) brightness(0.96);
   animation: hero-ken 32s var(--ease-outlaw) both;
 }
 
@@ -143,13 +143,25 @@
   --grain-photo: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAPGElEQVR42g3X6VaxCwBA4feaSlTmNCFFMpSEDEVKUmQoRUX6ZE4ZikpIQoWMRSEldEfnXMH+96y1Af/+cQHz92PzyZnMeJOOOxqn85Y/94/topPdJeVo8aSnDBbbsGUhe4TzhZlbmOampmpZxVZA37vnMYu6gFMYmozc3IxdvU+kiPV/add5UwANJS59z6RMGtJjrtf0zMiSG/OWGbVPXJH0ErKMXDVt/u0nQaVovlYGVP2gOKQIc366f9LvGOP74JwdTHJljpPH6mpc+cP7/vckT/KxIAvnTyW/H3iZT58mbA/X0ylEP0/DlIBeXpAjwsNBiDTYVOgP+rsTySLAysZvnsm+Qi45rjQ6x8bmT0DbM5oaF5YCf7beTAGlm+tik49DPwpCSwwj9ZVq3AF1JrBk6/B2v6vzCZW/WxbH2sl2Q9W3lKqTxbKWrYbu8v/ohGaBWVhTl3XD0cl2v1QPgtAPINlaEY+/qvk5FuvB42ZFCvZEVLijCGhjufpyAn7RHAqiVMaImoz9ZqX93jXZGZye3zRiBUYd//GZQt4+EDceu5hqxyico7kvzWZPV36v7UGKvgyx7w/XU6XjmQWCsEs4TfxPhrr6wm21ruh6SCUl4TgDlgIHgTSlndKR484Wb0gk+UCWjSRrIHZW7cpydnG79viMJhXAPUUqCtG0/5NWiAFEwOm4TWbE79M8RQti2M+CUesDFwjfvIljqcwzx++Apv0ohhIlUU+B/U54FO4UVlDvDhI5fJnO6FDThsHLr1iSqRaahkPZOgbNFCi4PjI0p6YPWN9MMpOAnnEggDpmf1oR0xWCXOD10UTiXKBOWZ7RixGaSQqnClN4XtguGB9891IijwDnIZ21qELx7zXg5u0uapNxx72srGg");
 }
 
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("/grain-fine.png"), var(--grain-photo);
+  background-repeat: repeat;
+  background-size: 140px 140px;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+}
+
 .film-grain {
   position: fixed;
   inset: 0;
-  z-index: 45;
+  z-index: 9998;
   pointer-events: none;
   overflow: hidden;
-  mix-blend-mode: overlay;
 }
 
 .film-grain-svg {
@@ -158,7 +170,8 @@
   width: 116%;
   height: 116%;
   display: block;
-  opacity: 0.42;
+  opacity: 0.28;
+  mix-blend-mode: overlay;
 }
 
 .film-grain-fine,
@@ -171,17 +184,22 @@
 .film-grain-fine {
   position: absolute;
   inset: -25%;
-  background-image: url("./assets/grain-fine.png"), var(--grain-photo);
+  background-image: url("/grain-fine.png"), url("./assets/grain-fine.png"),
+    var(--grain-photo);
   background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
   animation: grain-flicker 0.38s steps(1) infinite;
 }
 
 .film-grain-coarse {
   position: absolute;
   inset: -20%;
-  background-image: url("./assets/grain-coarse.png"), var(--grain-photo);
+  background-image: url("/grain-coarse.png"), url("./assets/grain-coarse.png"),
+    var(--grain-photo);
   background-size: 260px 260px;
-  opacity: 0.45;
+  mix-blend-mode: overlay;
+  opacity: 0.4;
   animation: grain-flicker 0.62s steps(1) infinite reverse;
 }
 
@@ -231,8 +249,8 @@
 
 .hero-logo {
   width: auto;
-  height: min(48vh, calc(96vw * 0.554));
-  max-width: 96vw;
+  height: min(32vh, calc(86vw * 0.5), 240px);
+  max-width: 88vw;
   object-fit: contain;
 }
 
@@ -261,7 +279,7 @@
 
 @media (min-width: 768px) {
   .hero-logo {
-    height: min(66vh, calc(96vw * 0.554));
+    height: min(44vh, calc(70vw * 0.5), 400px);
   }
 }
 
@@ -287,8 +305,12 @@
   transform: scale(1.07);
 }
 
+.media-card:not(.is-ended):hover img {
+  filter: contrast(1.08) saturate(1.12);
+}
+
 .media-card:hover .event-stock {
-  filter: grayscale(1) contrast(1.35) brightness(0.95);
+  filter: grayscale(1) contrast(1.22) brightness(0.58);
 }
 
 .media-card.is-ended img,

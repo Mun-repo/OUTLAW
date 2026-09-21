@@ -16,6 +16,9 @@ const EVENT_STOCK = [
   lightsUrl,
 ] as const;
 
+/** Public URL — ships as /hero.jpg on Vercel from public/. */
+export const HERO_PUBLIC = "/hero.jpg";
+/** Vite-bundled copy — hashed /assets URL if the public file is missing. */
 export const HERO_IMAGE = heroUrl;
 
 export function eventCover(event: EventItem) {

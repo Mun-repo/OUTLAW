@@ -92,7 +92,10 @@ function EventOverlayBody({
         <img
           src={cover.src}
           alt=""
-          className={cn("event-stock size-full object-cover", ended && "grayscale")}
+          className={cn(
+            "size-full object-cover",
+            ended ? "event-stock" : "event-live",
+          )}
         />
         <div className="photo-grain" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/20 md:bg-gradient-to-r md:from-transparent md:to-ink/30" />

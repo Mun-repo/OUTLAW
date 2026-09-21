@@ -38,7 +38,10 @@ export function EventCard({
         <img
           src={cover.src}
           alt=""
-          className={cn("event-stock size-full object-cover", ended && "grayscale")}
+          className={cn(
+            "size-full object-cover",
+            ended ? "event-stock" : "event-live",
+          )}
         />
         <div className="photo-grain" />
         <div
