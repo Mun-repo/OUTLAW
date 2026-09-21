@@ -88,7 +88,7 @@
 }
 
 .event-live {
-  filter: saturate(1.06) contrast(1.04);
+  filter: saturate(1.18) contrast(1.05);
 }
 
 .event-stock {
@@ -126,7 +126,7 @@
   position: relative;
   z-index: 1;
   object-position: center 40%;
-  filter: grayscale(0.35) contrast(1.06) brightness(0.92) blur(8px);
+  filter: saturate(1.1) contrast(1.05) brightness(0.95) blur(8px);
   transform: scale(1.12);
   animation: hero-ken 32s var(--ease-outlaw) both;
 }
@@ -154,7 +154,7 @@ html::after {
   background-repeat: repeat;
   background-size: 220px 220px;
   opacity: 0.035;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
 }
 
 .film-grain {
@@ -172,7 +172,7 @@ html::after {
   height: 116%;
   display: block;
   opacity: 0.045;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
 }
 
 .film-grain-fine,
@@ -188,7 +188,7 @@ html::after {
   background-image: url("/grain-fine.png"), url("./assets/grain-fine.png"),
     var(--grain-photo);
   background-size: 220px 220px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   opacity: 0.08;
   animation: grain-flicker 0.38s steps(1) infinite;
 }
@@ -199,7 +199,7 @@ html::after {
   background-image: url("/grain-coarse.png"), url("./assets/grain-coarse.png"),
     var(--grain-photo);
   background-size: 320px 320px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   opacity: 0.04;
   animation: grain-flicker 0.62s steps(1) infinite reverse;
 }
@@ -209,7 +209,7 @@ html::after {
   inset: 0;
   background-image: url("./assets/grain-fine.png"), var(--grain-photo);
   background-size: 180px 180px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   opacity: 0.07;
   animation: grain-flicker 0.32s steps(1) infinite;
 }
@@ -219,7 +219,7 @@ html::after {
   inset: 0;
   background-image: url("./assets/grain-fine.png"), var(--grain-photo);
   background-size: 180px 180px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   opacity: 0.1;
   transition: opacity 500ms var(--ease-outlaw);
 }
@@ -305,7 +305,7 @@ html::after {
 
 .media-card:not(.is-ended) img,
 .media-card:not(.is-ended) .event-live {
-  filter: saturate(1.06) contrast(1.04);
+  filter: saturate(1.18) contrast(1.05);
 }
 
 .media-card:hover img {
@@ -314,7 +314,7 @@ html::after {
 
 .media-card:not(.is-ended):hover img,
 .media-card:not(.is-ended):hover .event-live {
-  filter: contrast(1.08) saturate(1.12);
+  filter: contrast(1.08) saturate(1.22);
 }
 
 .media-card:hover .event-stock {
