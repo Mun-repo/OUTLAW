@@ -14,6 +14,8 @@ export function Hero() {
           src={HERO_IMAGE}
           alt=""
           className="hero-bg-img event-stock size-full object-cover"
+          fetchPriority="high"
+          decoding="async"
           onError={(e) => {
             e.currentTarget.style.display = "none";
           }}
@@ -63,7 +65,7 @@ export function Hero() {
         <motion.p
           variants={copy}
           transition={{ duration: 0.95, ease }}
-          className="mt-6 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:mt-8 md:text-3xl lg:text-4xl"
+          className="mt-6 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:text-3xl lg:text-4xl md:mt-8"
         >
           Ceux qui tracent leur propre route.
         </motion.p>

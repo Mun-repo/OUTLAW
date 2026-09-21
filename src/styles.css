@@ -103,23 +103,44 @@
     radial-gradient(ellipse at center, transparent 24%, rgb(0 0 0 / 0.78) 100%);
 }
 
-/* Cinematic plate behind the hero photo — visible if /hero.jpg is missing. */
+/*
+ * Hero plate. The concert photo is bundled via Vite (`url()` rewrite) so it
+ * ships inside /assets even when /public/hero.jpg is missing from the CDN.
+ */
 .hero-stage {
-  background-color: #000;
-  background-image:
-    radial-gradient(ellipse 80% 55% at 50% 42%, rgb(48 48 48 / 0.5), transparent 64%),
-    linear-gradient(180deg, #1a1a1a 0%, #050505 55%, #000 100%);
+  background-color: #050505;
+}
+
+.hero-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("./assets/hero.jpg");
+  background-size: cover;
+  background-position: center 42%;
+  filter: grayscale(1) contrast(1.22) brightness(0.78);
+  transform: scale(1.04);
+  animation: hero-ken 32s var(--ease-outlaw) both;
+}
+
+.hero-bg-img {
+  position: relative;
+  z-index: 1;
+  animation: hero-ken 32s var(--ease-outlaw) both;
+}
+
+.hero-vignette,
+.hero-grain {
+  z-index: 2;
 }
 
 /*
- * 35mm grain. A tiled PNG is inlined as a data-URI so the overlay never
- * 404s if /public textures are missing from the CDN. Photographic PNGs
- * in /public layer on top when they are deployed.
+ * 35mm grain. PNGs are bundled from src/assets (hashed /assets URLs).
+ * A tiny inlined tile remains as last-resort fallback.
  */
 :root {
-  --grain-photo: url("data:image/png;base64,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");
-  --grain-fine-svg: var(--grain-photo);
-  --grain-coarse-svg: var(--grain-photo);
+  --grain-photo: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAPGElEQVR42g3X6VaxCwBA4feaSlTmNCFFMpSEDEVKUmQoRUX6ZE4ZikpIQoWMRSEldEfnXMH+96y1Af/+cQHz92PzyZnMeJOOOxqn85Y/94/topPdJeVo8aSnDBbbsGUhe4TzhZlbmOampmpZxVZA37vnMYu6gFMYmozc3IxdvU+kiPV/add5UwANJS59z6RMGtJjrtf0zMiSG/OWGbVPXJH0ErKMXDVt/u0nQaVovlYGVP2gOKQIc366f9LvGOP74JwdTHJljpPH6mpc+cP7/vckT/KxIAvnTyW/H3iZT58mbA/X0ylEP0/DlIBeXpAjwsNBiDTYVOgP+rsTySLAysZvnsm+Qi45rjQ6x8bmT0DbM5oaF5YCf7beTAGlm+tik49DPwpCSwwj9ZVq3AF1JrBk6/B2v6vzCZW/WxbH2sl2Q9W3lKqTxbKWrYbu8v/ohGaBWVhTl3XD0cl2v1QPgtAPINlaEY+/qvk5FuvB42ZFCvZEVLijCGhjufpyAn7RHAqiVMaImoz9ZqX93jXZGZye3zRiBUYd//GZQt4+EDceu5hqxyico7kvzWZPV36v7UGKvgyx7w/XU6XjmQWCsEs4TfxPhrr6wm21ruh6SCUl4TgDlgIHgTSlndKR484Wb0gk+UCWjSRrIHZW7cpydnG79viMJhXAPUUqCtG0/5NWiAFEwOm4TWbE79M8RQti2M+CUesDFwjfvIljqcwzx++Apv0ohhIlUU+B/U54FO4UVlDvDhI5fJnO6FDThsHLr1iSqRaahkPZOgbNFCi4PjI0p6YPWN9MMpOAnnEggDpmf1oR0xWCXOD10UTiXKBOWZ7RixGaSQqnClN4XtguGB9891IijwDnIZ21qELx7zXg5u0uapNxx72srGg");
 }
 
 .film-grain {
@@ -150,7 +171,7 @@
 .film-grain-fine {
   position: absolute;
   inset: -25%;
-  background-image: url("/grain-fine.png"), url("/grain-fine.svg"), var(--grain-photo);
+  background-image: url("./assets/grain-fine.png"), var(--grain-photo);
   background-size: 160px 160px;
   animation: grain-flicker 0.38s steps(1) infinite;
 }
@@ -158,17 +179,16 @@
 .film-grain-coarse {
   position: absolute;
   inset: -20%;
-  background-image: url("/grain-coarse.png"), url("/grain-coarse.svg"), var(--grain-photo);
+  background-image: url("./assets/grain-coarse.png"), var(--grain-photo);
   background-size: 260px 260px;
   opacity: 0.45;
   animation: grain-flicker 0.62s steps(1) infinite reverse;
 }
 
-/* Stronger grain on the hero plate only */
 .hero-grain {
   position: absolute;
   inset: 0;
-  background-image: url("/grain-fine.png"), url("/grain-fine.svg"), var(--grain-photo);
+  background-image: url("./assets/grain-fine.png"), var(--grain-photo);
   background-size: 110px 110px;
   mix-blend-mode: overlay;
   animation: grain-flicker 0.32s steps(1) infinite;
@@ -177,7 +197,7 @@
 .photo-grain {
   position: absolute;
   inset: 0;
-  background-image: url("/grain-fine.png"), url("/grain-fine.svg"), var(--grain-photo);
+  background-image: url("./assets/grain-fine.png"), var(--grain-photo);
   background-size: 110px 110px;
   mix-blend-mode: overlay;
   opacity: 0.7;
@@ -228,10 +248,6 @@
   pointer-events: none;
   max-width: 100%;
   overflow: hidden;
-}
-
-.hero-bg-img {
-  animation: hero-ken 32s var(--ease-outlaw) both;
 }
 
 @keyframes hero-ken {
@@ -388,6 +404,7 @@
   .shake-error,
   .scroll-cue,
   .hero-bg-img,
+  .hero-stage::before,
   .film-grain-fine,
   .film-grain-coarse,
   .hero-grain {

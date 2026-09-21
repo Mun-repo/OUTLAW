@@ -10,6 +10,7 @@ import { ProductOverlay } from "@/components/shop/product-overlay";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { listEvents } from "@/lib/server/catalog";
+import { HERO_IMAGE } from "@/lib/stock";
 import { useProducts } from "@/lib/shop";
 import type { EventItem, Product } from "@/lib/types";
 
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: () => ({
     meta: [{ title: "Outlaw" }],
+    links: [{ rel: "preload", as: "image", href: HERO_IMAGE }],
   }),
 });
 
