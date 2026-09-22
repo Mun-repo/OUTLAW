@@ -20,10 +20,9 @@ export type SendResult = {
 
 function fromAddress() {
   return (
-    env("FROM_EMAIL") ??
-    env("RESEND_FROM") ??
-    env("NEXT_PUBLIC_FROM_EMAIL") ??
-    "Association Outlaw <onboarding@resend.dev>"
+    env("RESEND_FROM") ||
+    env("FROM_EMAIL") ||
+    "OUTLAW <contact@outlawfld.fr>"
   );
 }
 
