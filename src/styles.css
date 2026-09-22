@@ -126,7 +126,7 @@
   position: relative;
   z-index: 1;
   object-position: center 40%;
-  filter: saturate(1.1) contrast(1.05) brightness(0.95) blur(8px);
+  filter: saturate(0.42) contrast(1.08) brightness(0.88) blur(8px);
   transform: scale(1.12);
   animation: hero-ken 32s var(--ease-outlaw) both;
 }
