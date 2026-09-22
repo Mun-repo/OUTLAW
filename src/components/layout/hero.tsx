@@ -41,7 +41,7 @@ export function Hero() {
       </p>
 
       <motion.div
-        className="relative z-10 flex w-full max-w-4xl flex-col items-center"
+        className="relative z-10 flex w-full max-w-6xl flex-col items-center"
         initial={reduce ? false : "hidden"}
         animate="visible"
         variants={{
@@ -82,7 +82,7 @@ export function Hero() {
         <motion.div
           variants={copy}
           transition={{ duration: 0.8, ease }}
-          className="relative z-10 mt-10 flex shrink-0 flex-col items-center gap-3 md:mt-12"
+          className="relative z-10 mt-8 flex shrink-0 flex-col items-center gap-3 md:mt-10"
         >
           <span className="text-2xs tracking-lux uppercase text-muted-foreground">
             Explorer

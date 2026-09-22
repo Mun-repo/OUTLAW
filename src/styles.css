@@ -251,8 +251,8 @@ html::after {
 
 .hero-logo {
   width: auto;
-  height: min(28vh, calc(78vw * 0.5), 210px);
-  max-width: 86vw;
+  height: min(48vh, calc(94vw * 0.56), 400px);
+  max-width: 94vw;
   object-fit: contain;
 }
 
@@ -281,7 +281,8 @@ html::after {
 
 @media (min-width: 768px) {
   .hero-logo {
-    height: min(40vh, calc(58vw * 0.5), 340px);
+    height: min(60vh, calc(88vw * 0.54), 580px);
+    max-width: 92vw;
   }
 }
 
