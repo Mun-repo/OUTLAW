@@ -10,7 +10,7 @@ async function handle(request: Request) {
   return Response.json(result);
 }
 
-export const Route = createFileRoute("/api/cron/reminders")({
+export const Route = createFileRoute("/api/cron/event-reminders")({
   server: {
     handlers: {
       GET: async ({ request }) => handle(request),

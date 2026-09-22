@@ -82,14 +82,22 @@ export const registerForEvent = createServerFn({ method: "POST" })
     await sql`update registrations set ticket_code = ${code} where id = ${id}`;
 
     const when = formatEventWhen(event.event_date, event.event_time);
-    const emailResult = await sendConfirmationEmail(data.email, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      eventTitle: event.title,
-      when,
-      location: event.location,
-      ticketCode: code,
-    });
+    let emailResult = {
+      delivered: false,
+      html: "",
+    };
+    try {
+      emailResult = await sendConfirmationEmail(data.email, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        eventTitle: event.title,
+        when,
+        location: event.location,
+        ticketCode: code,
+      });
+    } catch (err) {
+      console.error("[email] registration confirmation failed:", err);
+    }
 
     return {
       registration: {

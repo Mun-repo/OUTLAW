@@ -131,13 +131,19 @@ async function markPaid(order: ShopOrder, stripeSessionId: string | null) {
     return current[0] ? mapOrder(current[0]) : order;
   }
   const paid = mapOrder(rows[0]);
-  const { sendOrderConfirmationEmail } = await import("@/lib/server/email");
-  await sendOrderConfirmationEmail(paid.email, {
-    firstName: paid.firstName,
-    orderNumber: paid.orderNumber,
-    items: paid.items,
-    total: formatPrice(paid.total),
-  });
+  try {
+    const { sendOrderConfirmationEmail } = await import("@/lib/server/email");
+    await sendOrderConfirmationEmail(paid.email, {
+      firstName: paid.firstName,
+      lastName: paid.lastName,
+      orderNumber: paid.orderNumber,
+      items: paid.items,
+      total: formatPrice(paid.total),
+      pickupNote: "Remise en main propre à l'université. Aucune livraison.",
+    });
+  } catch (err) {
+    console.error("[email] order confirmation failed:", err);
+  }
   return paid;
 }
 

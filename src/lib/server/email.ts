@@ -12,6 +12,12 @@ import {
 
 const BATCH = 100;
 
+export type SendResult = {
+  delivered: boolean;
+  html: string;
+  error?: string;
+};
+
 function fromAddress() {
   return (
     env("FROM_EMAIL") ??
@@ -27,21 +33,28 @@ function getClient() {
   return new Resend(key);
 }
 
-async function sendHtml(to: string, subject: string, html: string) {
+async function sendHtml(to: string, subject: string, html: string): Promise<SendResult> {
   const client = getClient();
   if (!client) {
     return { delivered: false, html };
   }
-  const result = await client.emails.send({
-    from: fromAddress(),
-    to,
-    subject,
-    html,
-  });
-  if (result.error) {
-    return { delivered: false, html, error: result.error.message };
+  try {
+    const result = await client.emails.send({
+      from: fromAddress(),
+      to,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error("[email] Resend error:", result.error.message);
+      return { delivered: false, html, error: result.error.message };
+    }
+    return { delivered: true, html };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Envoi impossible";
+    console.error("[email] send failed:", message);
+    return { delivered: false, html, error: message };
   }
-  return { delivered: true, html };
 }
 
 export async function sendConfirmationEmail(
@@ -50,26 +63,26 @@ export async function sendConfirmationEmail(
 ) {
   return sendHtml(
     to,
-    "Confirmation de ton inscription - OUTLAW",
+    `Pass confirmé — ${payload.eventTitle}`,
     confirmationEmailHtml(payload),
   );
 }
 
 export async function sendReminderEmail(to: string, payload: ReminderPayload) {
-  return sendHtml(
-    to,
-    "[Rappel] Ton événement OUTLAW c'est demain !",
-    reminderEmailHtml(payload),
-  );
+  const subject = payload.imminent
+    ? `C'est aujourd'hui : ${payload.eventTitle}`
+    : `C'est demain : ${payload.eventTitle}`;
+  return sendHtml(to, subject, reminderEmailHtml(payload));
 }
 
 export async function sendOrderConfirmationEmail(
   to: string,
   payload: OrderEmailPayload,
 ) {
+  const number = payload.orderNumber.replace(/^#/, "");
   return sendHtml(
     to,
-    "Ta commande OUTLAW est confirmée !",
+    `Commande #${number} confirmée — OUTLAW`,
     orderConfirmationEmailHtml(payload),
   );
 }
@@ -96,18 +109,23 @@ export async function sendMassEmails(input: {
   let delivered = 0;
   for (let i = 0; i < input.recipients.length; i += BATCH) {
     const slice = input.recipients.slice(i, i + BATCH);
-    const result = await client.batch.send(
-      slice.map((r) => ({
-        from: fromAddress(),
-        to: r.email,
-        subject: input.subject,
-        html: htmlFor(r.firstName),
-      })),
-    );
-    if (result.error) {
-      throw new Error(result.error.message);
+    try {
+      const result = await client.batch.send(
+        slice.map((r) => ({
+          from: fromAddress(),
+          to: r.email,
+          subject: input.subject,
+          html: htmlFor(r.firstName),
+        })),
+      );
+      if (result.error) {
+        console.error("[email] batch error:", result.error.message);
+        continue;
+      }
+      delivered += slice.length;
+    } catch (err) {
+      console.error("[email] batch failed:", err);
     }
-    delivered += slice.length;
   }
 
   return {

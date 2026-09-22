@@ -18,6 +18,7 @@ import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiSendEmailRouteImport } from './routes/api/send-email'
 import { Route as ShopSuccessRouteImport } from './routes/shop/success'
 import { Route as ApiCheckoutSuccessRouteImport } from './routes/api/checkout.success'
+import { Route as ApiCronEventRemindersRouteImport } from './routes/api/cron/event-reminders'
 import { Route as ApiCronRemindersRouteImport } from './routes/api/cron/reminders'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
 
@@ -66,6 +67,11 @@ const ApiCheckoutSuccessRoute = ApiCheckoutSuccessRouteImport.update({
   path: '/success',
   getParentRoute: () => ApiCheckoutRoute,
 } as any)
+const ApiCronEventRemindersRoute = ApiCronEventRemindersRouteImport.update({
+  id: '/api/cron/event-reminders',
+  path: '/api/cron/event-reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCronRemindersRoute = ApiCronRemindersRouteImport.update({
   id: '/api/cron/reminders',
   path: '/api/cron/reminders',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/api/send-email': typeof ApiSendEmailRoute
   '/shop/success': typeof ShopSuccessRoute
   '/api/checkout/success': typeof ApiCheckoutSuccessRoute
+  '/api/cron/event-reminders': typeof ApiCronEventRemindersRoute
   '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/api/send-email': typeof ApiSendEmailRoute
   '/shop/success': typeof ShopSuccessRoute
   '/api/checkout/success': typeof ApiCheckoutSuccessRoute
+  '/api/cron/event-reminders': typeof ApiCronEventRemindersRoute
   '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/api/send-email': typeof ApiSendEmailRoute
   '/shop/success': typeof ShopSuccessRoute
   '/api/checkout/success': typeof ApiCheckoutSuccessRoute
+  '/api/cron/event-reminders': typeof ApiCronEventRemindersRoute
   '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/api/send-email'
     | '/shop/success'
     | '/api/checkout/success'
+    | '/api/cron/event-reminders'
     | '/api/cron/reminders'
     | '/api/stripe/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/api/send-email'
     | '/shop/success'
     | '/api/checkout/success'
+    | '/api/cron/event-reminders'
     | '/api/cron/reminders'
     | '/api/stripe/webhook'
   id:
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/api/send-email'
     | '/shop/success'
     | '/api/checkout/success'
+    | '/api/cron/event-reminders'
     | '/api/cron/reminders'
     | '/api/stripe/webhook'
   fileRoutesById: FileRoutesById
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   ApiCheckoutRoute: typeof ApiCheckoutRouteWithChildren
   ApiSendEmailRoute: typeof ApiSendEmailRoute
   ShopSuccessRoute: typeof ShopSuccessRoute
+  ApiCronEventRemindersRoute: typeof ApiCronEventRemindersRoute
   ApiCronRemindersRoute: typeof ApiCronRemindersRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCheckoutSuccessRouteImport
       parentRoute: typeof ApiCheckoutRoute
     }
+    '/api/cron/event-reminders': {
+      id: '/api/cron/event-reminders'
+      path: '/api/cron/event-reminders'
+      fullPath: '/api/cron/event-reminders'
+      preLoaderRoute: typeof ApiCronEventRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/cron/reminders': {
       id: '/api/cron/reminders'
       path: '/api/cron/reminders'
@@ -275,6 +295,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCheckoutRoute: ApiCheckoutRouteWithChildren,
   ApiSendEmailRoute: ApiSendEmailRoute,
   ShopSuccessRoute: ShopSuccessRoute,
+  ApiCronEventRemindersRoute: ApiCronEventRemindersRoute,
   ApiCronRemindersRoute: ApiCronRemindersRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
