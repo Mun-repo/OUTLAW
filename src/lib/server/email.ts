@@ -2,15 +2,21 @@ import { Resend } from "resend";
 import { env } from "@/lib/env.server";
 import {
   confirmationEmailHtml,
+  confirmationEmailText,
   massEmailHtml,
+  massEmailText,
   orderConfirmationEmailHtml,
+  orderConfirmationEmailText,
   reminderEmailHtml,
+  reminderEmailText,
   type ConfirmationPayload,
   type OrderEmailPayload,
   type ReminderPayload,
 } from "@/lib/email/template";
 
 const BATCH = 100;
+const REPLY_TO = "contact@outlawfld.fr";
+const UNSUBSCRIBE = "<mailto:contact@outlawfld.fr?subject=desinscription>";
 
 export type SendResult = {
   delivered: boolean;
@@ -32,27 +38,42 @@ function getClient() {
   return new Resend(key);
 }
 
-async function sendHtml(to: string, subject: string, html: string): Promise<SendResult> {
+function mailHeaders() {
+  return {
+    "List-Unsubscribe": UNSUBSCRIBE,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
+}
+
+async function sendMail(input: {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+}): Promise<SendResult> {
   const client = getClient();
   if (!client) {
-    return { delivered: false, html };
+    return { delivered: false, html: input.html };
   }
   try {
     const result = await client.emails.send({
       from: fromAddress(),
-      to,
-      subject,
-      html,
+      to: input.to,
+      replyTo: REPLY_TO,
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+      headers: mailHeaders(),
     });
     if (result.error) {
       console.error("[email] Resend error:", result.error.message);
-      return { delivered: false, html, error: result.error.message };
+      return { delivered: false, html: input.html, error: result.error.message };
     }
-    return { delivered: true, html };
+    return { delivered: true, html: input.html };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Envoi impossible";
     console.error("[email] send failed:", message);
-    return { delivered: false, html, error: message };
+    return { delivered: false, html: input.html, error: message };
   }
 }
 
@@ -60,18 +81,24 @@ export async function sendConfirmationEmail(
   to: string,
   payload: ConfirmationPayload,
 ) {
-  return sendHtml(
+  return sendMail({
     to,
-    `Pass confirmé — ${payload.eventTitle}`,
-    confirmationEmailHtml(payload),
-  );
+    subject: `Confirmation d'inscription — ${payload.eventTitle}`,
+    html: confirmationEmailHtml(payload),
+    text: confirmationEmailText(payload),
+  });
 }
 
 export async function sendReminderEmail(to: string, payload: ReminderPayload) {
   const subject = payload.imminent
-    ? `C'est aujourd'hui : ${payload.eventTitle}`
-    : `C'est demain : ${payload.eventTitle}`;
-  return sendHtml(to, subject, reminderEmailHtml(payload));
+    ? `Rappel : ${payload.eventTitle} a lieu aujourd'hui`
+    : `Rappel : ${payload.eventTitle} a lieu demain`;
+  return sendMail({
+    to,
+    subject,
+    html: reminderEmailHtml(payload),
+    text: reminderEmailText(payload),
+  });
 }
 
 export async function sendOrderConfirmationEmail(
@@ -79,11 +106,12 @@ export async function sendOrderConfirmationEmail(
   payload: OrderEmailPayload,
 ) {
   const number = payload.orderNumber.replace(/^#/, "");
-  return sendHtml(
+  return sendMail({
     to,
-    `Commande #${number} confirmée — OUTLAW`,
-    orderConfirmationEmailHtml(payload),
-  );
+    subject: `Confirmation de commande ${number}`,
+    html: orderConfirmationEmailHtml(payload),
+    text: orderConfirmationEmailText(payload),
+  });
 }
 
 export async function sendMassEmails(input: {
@@ -94,6 +122,13 @@ export async function sendMassEmails(input: {
 }) {
   const htmlFor = (firstName: string) =>
     massEmailHtml({
+      firstName,
+      eventTitle: input.eventTitle,
+      subject: input.subject,
+      message: input.message,
+    });
+  const textFor = (firstName: string) =>
+    massEmailText({
       firstName,
       eventTitle: input.eventTitle,
       subject: input.subject,
@@ -113,8 +148,11 @@ export async function sendMassEmails(input: {
         slice.map((r) => ({
           from: fromAddress(),
           to: r.email,
+          replyTo: REPLY_TO,
           subject: input.subject,
           html: htmlFor(r.firstName),
+          text: textFor(r.firstName),
+          headers: mailHeaders(),
         })),
       );
       if (result.error) {
