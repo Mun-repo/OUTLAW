@@ -8,6 +8,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { Providers } from "@/components/layout/providers";
 import { FilmGrain } from "@/components/layout/film-grain";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { listProducts } from "@/lib/server/catalog";
@@ -60,6 +61,7 @@ function RootDocument() {
       <body className="min-h-screen bg-background text-foreground">
         <PreviewHostBridge />
         <FilmGrain />
+        <ScrollProgress />
         <AuthProvider>
           <Providers>
             <div className="flex min-h-screen flex-col">

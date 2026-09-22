@@ -11,7 +11,7 @@ export function SiteFooter() {
   if (pathname.startsWith("/admin")) return null;
 
   return (
-    <footer className="mt-auto border-t border-border">
+    <footer className="mt-auto overflow-hidden border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 md:flex-row md:items-end md:justify-between md:px-6">
         <div className="flex flex-col gap-4">
           <Logo imgClassName="h-7 md:h-8 opacity-90" />
@@ -21,24 +21,27 @@ export function SiteFooter() {
           </p>
         </div>
         <nav className="flex flex-wrap gap-x-8 gap-y-3 text-xs tracking-lux uppercase text-muted-foreground">
-          <a href="/#a-propos" className="hover:text-foreground">
+          <a href="/#a-propos" className="nav-link">
             À propos
           </a>
-          <Link to="/evenements" className="hover:text-foreground">
+          <Link to="/evenements" className="nav-link">
             Événements
           </Link>
           {shopOpen ? (
             <>
-              <Link to="/boutique" className="hover:text-foreground">
+              <Link to="/boutique" className="nav-link">
                 Boutique
               </Link>
-              <Link to="/panier" className="hover:text-foreground">
+              <Link to="/panier" className="nav-link">
                 Panier
               </Link>
             </>
           ) : null}
         </nav>
       </div>
+      <p className="footer-mark" aria-hidden="true">
+        OUTLAW
+      </p>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 md:px-6">
           <p className="text-2xs tracking-lux uppercase text-muted-foreground/70">

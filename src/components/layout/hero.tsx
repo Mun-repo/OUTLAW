@@ -33,9 +33,16 @@ export function Hero() {
         <div className="hero-grain" />
       </div>
 
+      <div className="hero-frame" aria-hidden="true">
+        <span className="hero-corner hero-corner-tl" />
+        <span className="hero-corner hero-corner-tr" />
+        <span className="hero-corner hero-corner-bl" />
+        <span className="hero-corner hero-corner-br" />
+      </div>
+
       <p
         aria-hidden="true"
-        className="hero-ghost pointer-events-none absolute inset-x-0 top-[18%] text-center md:top-[14%]"
+        className="hero-ghost pointer-events-none absolute inset-x-0 top-[16%] text-center md:top-[12%]"
       >
         OUTLAW
       </p>
@@ -46,60 +53,66 @@ export function Hero() {
         animate="visible"
         variants={{
           hidden: {},
-          visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
+          visible: { transition: { staggerChildren: 0.14, delayChildren: 0.12 } },
         }}
       >
         <motion.p
           variants={copy}
-          transition={{ duration: 0.9, ease }}
+          transition={{ duration: 1, ease }}
           className="max-w-xs text-2xs font-medium tracking-lux uppercase text-muted-foreground md:max-w-none md:text-xs"
         >
-          Collectif Indépendant & Plateforme Culturelle
+          Collectif indépendant · Plateforme culturelle
         </motion.p>
 
         <motion.div
           variants={logo}
-          transition={{ duration: 1.15, ease }}
-          className="mt-4 md:mt-6"
+          transition={{ duration: 1.35, ease }}
+          className="mt-5 md:mt-7"
         >
           <Logo imgClassName="hero-logo mx-auto" />
         </motion.div>
 
         <motion.div
-          variants={copy}
-          transition={{ duration: 0.9, ease }}
-          className="mx-auto mt-5 h-px w-16 bg-foreground/40 md:mt-7"
+          variants={line}
+          transition={{ duration: 1.1, ease }}
+          className="hero-rule mx-auto mt-6 md:mt-8"
         />
 
         <motion.p
           variants={copy}
-          transition={{ duration: 0.95, ease }}
-          className="mt-5 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:mt-7 md:text-3xl lg:text-4xl"
+          transition={{ duration: 1.05, ease }}
+          className="mt-6 max-w-2xl font-display text-xl font-semibold leading-snug tracking-display text-foreground md:mt-8 md:text-3xl lg:text-4xl"
         >
           Ceux qui tracent leur propre route.
         </motion.p>
 
-        <motion.div
+        <motion.a
+          href="/#a-propos"
           variants={copy}
-          transition={{ duration: 0.8, ease }}
-          className="relative z-10 mt-8 flex shrink-0 flex-col items-center gap-3 md:mt-10"
+          transition={{ duration: 0.9, ease }}
+          className="relative z-10 mt-10 flex shrink-0 flex-col items-center gap-3 md:mt-12"
         >
           <span className="text-2xs tracking-lux uppercase text-muted-foreground">
             Explorer
           </span>
-          <span className="scroll-cue h-10 w-px bg-foreground/50" />
-        </motion.div>
+          <span className="scroll-cue h-12 w-px bg-foreground/50" />
+        </motion.a>
       </motion.div>
     </section>
   );
 }
 
 const copy = {
-  hidden: { opacity: 0, y: 22, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 const logo = {
-  hidden: { opacity: 0, y: 36, scale: 0.9, filter: "blur(12px)" },
+  hidden: { opacity: 0, y: 48, scale: 0.92, filter: "blur(18px)" },
   visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+};
+
+const line = {
+  hidden: { opacity: 0, scaleX: 0 },
+  visible: { opacity: 1, scaleX: 1 },
 };

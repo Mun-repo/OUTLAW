@@ -53,6 +53,11 @@
     border-color: var(--color-border);
   }
 
+  ::selection {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
   html,
   body,
   #app {
@@ -99,12 +104,12 @@
   background:
     linear-gradient(
       to top,
-      rgb(0 0 0 / 0.72) 0%,
-      rgb(0 0 0 / 0.16) 24%,
-      rgb(0 0 0 / 0.06) 52%,
-      rgb(0 0 0 / 0.28) 100%
+      rgb(0 0 0 / 0.78) 0%,
+      rgb(0 0 0 / 0.22) 26%,
+      rgb(0 0 0 / 0.08) 52%,
+      rgb(0 0 0 / 0.34) 100%
     ),
-    radial-gradient(ellipse at center, transparent 48%, rgb(0 0 0 / 0.38) 100%);
+    radial-gradient(ellipse at center, transparent 44%, rgb(0 0 0 / 0.42) 100%);
 }
 
 /*
@@ -126,7 +131,7 @@
   position: relative;
   z-index: 1;
   object-position: center 40%;
-  filter: saturate(0.42) contrast(1.08) brightness(0.88) blur(8px);
+  filter: grayscale(1) contrast(1.14) brightness(0.96) blur(2px);
   transform: scale(1.12);
   animation: hero-ken 32s var(--ease-outlaw) both;
 }
@@ -427,6 +432,156 @@ html::after {
   animation: outlaw-shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  z-index: 70;
+  pointer-events: none;
+  background: var(--color-foreground);
+  transform-origin: 0% 50%;
+}
+
+.hero-frame {
+  position: absolute;
+  inset: 1.25rem;
+  z-index: 8;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .hero-frame {
+    inset: 2rem;
+  }
+}
+
+.hero-corner {
+  position: absolute;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-color: rgb(244 240 230 / 0.42);
+  border-style: solid;
+}
+
+.hero-corner-tl {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.hero-corner-tr {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+
+.hero-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
+}
+
+.hero-corner-br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
+}
+
+.hero-rule {
+  height: 1px;
+  width: 4rem;
+  background: rgb(244 240 230 / 0.45);
+  transform-origin: center;
+}
+
+.section-index {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: rgb(244 240 230 / 0.12);
+  user-select: none;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.2rem;
+  transition: color 280ms var(--ease-outlaw);
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: var(--color-foreground);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 420ms var(--ease-outlaw);
+}
+
+.nav-link:hover::after,
+.nav-link.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--color-border);
+  background: #000;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-slide 48s linear infinite;
+}
+
+.marquee-track span {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  padding: 0.9rem 0;
+  white-space: nowrap;
+  color: rgb(244 240 230 / 0.42);
+}
+
+.footer-mark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(4.5rem, 22vw, 18rem);
+  line-height: 0.72;
+  letter-spacing: var(--tracking-display);
+  text-align: center;
+  color: rgb(244 240 230 / 0.055);
+  user-select: none;
+  pointer-events: none;
+  margin: 0.5rem 0 0;
+}
+
+@keyframes marquee-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rise-1,
   .rise-2,
@@ -438,7 +593,8 @@ html::after {
   .hero-stage::before,
   .film-grain-fine,
   .film-grain-coarse,
-  .hero-grain {
+  .hero-grain,
+  .marquee-track {
     animation: none;
   }
 

@@ -1,9 +1,12 @@
+import { motion, useReducedMotion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatEventWhen, isEventEnded } from "@/lib/format";
 import { eventCover } from "@/lib/stock";
 import { cn } from "@/lib/utils";
 import type { EventItem } from "@/lib/types";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export function EventCard({
   event,
@@ -18,14 +21,23 @@ export function EventCard({
 }) {
   const cover = eventCover(event);
   const ended = isEventEnded(event);
+  const reduce = useReducedMotion();
 
   return (
-    <article
+    <motion.article
       className={cn(
         "media-card group relative cursor-pointer overflow-hidden bg-card",
         ended && "is-ended",
       )}
       onClick={() => onOpen?.(event)}
+      initial={reduce ? false : { opacity: 0, y: 36, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{
+        duration: 0.85,
+        delay: ((index ?? 0) % 3) * 0.08,
+        ease,
+      }}
     >
       <div
         className={cn(
@@ -46,7 +58,7 @@ export function EventCard({
         <div className="photo-grain" />
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-500",
+            "absolute inset-0 transition-opacity duration-700",
             featured
               ? "bg-gradient-to-t from-ink via-ink/75 to-ink/25 group-hover:opacity-90"
               : "bg-gradient-to-t from-ink via-ink/70 to-ink/20 group-hover:opacity-90",
@@ -105,7 +117,7 @@ export function EventCard({
             <Button
               variant="outline"
               disabled={ended}
-              className="mt-5 w-full border-pure/40 bg-ink/40 text-pure backdrop-blur-sm hover:bg-pure hover:text-ink md:w-auto"
+              className="mt-5 w-full border-pure/40 bg-ink/40 text-pure backdrop-blur-sm transition-transform duration-500 group-hover:-translate-y-0.5 hover:bg-pure hover:text-ink md:w-auto"
               onClick={(e) => {
                 e.stopPropagation();
                 onOpen(event);
@@ -116,6 +128,6 @@ export function EventCard({
           ) : null}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }

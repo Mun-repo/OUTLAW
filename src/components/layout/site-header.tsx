@@ -65,10 +65,8 @@ export function SiteHeader() {
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "text-xs font-medium tracking-lux uppercase transition-colors duration-200",
-                    active
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                    "nav-link text-xs font-medium tracking-lux uppercase text-muted-foreground",
+                    active && "is-active text-foreground",
                   )}
                 >
                   {item.label}
@@ -77,7 +75,7 @@ export function SiteHeader() {
             })}
             <a
               href="/#a-propos"
-              className="text-xs font-medium tracking-lux uppercase text-muted-foreground transition-colors duration-200 hover:text-foreground"
+              className="nav-link text-xs font-medium tracking-lux uppercase text-muted-foreground"
             >
               À propos
             </a>

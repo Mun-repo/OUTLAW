@@ -5,6 +5,8 @@ import { EventCard } from "@/components/events/event-card";
 import { EventOverlay } from "@/components/events/event-overlay";
 import { About } from "@/components/layout/about";
 import { Hero } from "@/components/layout/hero";
+import { Marquee } from "@/components/layout/marquee";
+import { Reveal } from "@/components/layout/reveal";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductOverlay } from "@/components/shop/product-overlay";
 import { Button } from "@/components/ui/button";
@@ -41,6 +43,7 @@ function Home() {
   return (
     <main>
       <Hero />
+      <Marquee />
       <About />
 
       <section
@@ -48,8 +51,9 @@ function Home() {
         className="border-y border-border bg-card/40"
       >
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-6 md:py-28">
-          <div className="mb-12 flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <Reveal className="mb-12 flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-3xl">
+              <p className="section-index mb-6">02</p>
               <p className="text-2xs tracking-lux uppercase text-muted-foreground md:text-xs">
                 Fil d'actualité
               </p>
@@ -65,7 +69,7 @@ function Home() {
             <Button asChild variant="ghost">
               <Link to="/evenements">Tout voir</Link>
             </Button>
-          </div>
+          </Reveal>
 
           {eventsQuery.isLoading ? (
             <div className="flex flex-col gap-6">
@@ -111,8 +115,9 @@ function Home() {
 
       {shopOpen ? (
         <section className="mx-auto max-w-6xl px-4 py-20 md:px-6 md:py-24">
-          <div className="mb-10 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <Reveal className="mb-10 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
+              <p className="section-index mb-6">03</p>
               <p className="text-2xs tracking-lux uppercase text-muted-foreground md:text-xs">
                 Éditions
               </p>
@@ -123,7 +128,7 @@ function Home() {
             <Button asChild variant="ghost">
               <Link to="/boutique">Tout voir</Link>
             </Button>
-          </div>
+          </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((product) => (
               <ProductCard
