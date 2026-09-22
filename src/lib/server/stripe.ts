@@ -1,20 +1,21 @@
 import Stripe from "stripe";
 import { env, isWorkspacePreview } from "@/lib/env.server";
 
+let client: Stripe | null | undefined;
+
 export function getStripe() {
+  if (client !== undefined) return client;
   const key = env("STRIPE_SECRET_KEY");
-  if (!key) return null;
-  if (key.startsWith("rk_")) {
-    console.error(
-      "[stripe] STRIPE_SECRET_KEY is a restricted key (rk_). Checkout needs sk_test_ or sk_live_.",
-    );
+  if (!key) {
+    client = null;
     return null;
   }
-  return new Stripe(key);
+  client = new Stripe(key);
+  return client;
 }
 
 export function stripeConfigured() {
-  return Boolean(env("STRIPE_SECRET_KEY"));
+  return getStripe() !== null;
 }
 
 export type StripeWebhookEvent = {

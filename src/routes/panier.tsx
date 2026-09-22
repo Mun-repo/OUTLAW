@@ -62,21 +62,41 @@ function CartPage() {
   async function checkout(event: FormEvent) {
     event.preventDefault();
     setPaying(true);
+    const payload = {
+      firstName: buyer.firstName,
+      lastName: buyer.lastName,
+      email: buyer.email,
+      items: items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      })),
+      promoCode: promo?.code ?? null,
+      origin: window.location.origin,
+    };
     try {
-      const result = await startCheckout({
-        data: {
-          firstName: buyer.firstName,
-          lastName: buyer.lastName,
-          email: buyer.email,
-          items: items.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-          })),
-          promoCode: promo?.code ?? null,
-          origin: window.location.origin,
-        },
-      });
-      window.location.assign(result.url);
+      let url = "";
+      try {
+        const result = await startCheckout({ data: payload });
+        url = result.url;
+      } catch {
+        const response = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const body = (await response.json()) as {
+          url?: string;
+          error?: string;
+        };
+        if (!response.ok || !body.url) {
+          throw new Error(body.error || "Paiement impossible");
+        }
+        url = body.url;
+      }
+      if (!url.startsWith("http")) {
+        throw new Error("Paiement Stripe indisponible");
+      }
+      window.location.assign(url);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Paiement impossible");
       setPaying(false);

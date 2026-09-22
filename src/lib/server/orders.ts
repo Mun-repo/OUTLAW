@@ -261,40 +261,53 @@ export const startCheckout = createServerFn({ method: "POST" })
       total,
     });
 
-    const { stripe, configured } = await stripeApi();
+    const { stripe } = await stripeApi();
     const cents = Math.round(total * 100);
-    if (!stripe || cents <= 0) {
+    if (cents <= 0) {
       const paid = await markPaid(order, null);
       return {
         url: `${data.origin.replace(/\/$/, "")}/shop/success?order=${encodeURIComponent(paid.orderNumber)}`,
         orderNumber: paid.orderNumber,
-        stripe: configured,
+        stripe: false,
       };
     }
+    if (!stripe) {
+      throw new Error(
+        "Paiement Stripe indisponible. STRIPE_SECRET_KEY manquante.",
+      );
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      customer_email: data.email,
-      success_url: `${data.origin.replace(/\/$/, "")}/api/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${data.origin.replace(/\/$/, "")}/panier`,
-      metadata: { orderId: String(order.id), orderNumber: order.orderNumber },
-      line_items: [
-        {
-          quantity: 1,
-          price_data: {
-            currency: "eur",
-            unit_amount: cents,
-            product_data: {
-              name: `Commande OUTLAW #${order.orderNumber}`,
-              description: lines
-                .map((line) => `${line.title} × ${line.quantity}`)
-                .join(", ")
-                .slice(0, 400),
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        locale: "fr",
+        customer_email: data.email,
+        success_url: `${data.origin.replace(/\/$/, "")}/api/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${data.origin.replace(/\/$/, "")}/panier`,
+        metadata: { orderId: String(order.id), orderNumber: order.orderNumber },
+        line_items: [
+          {
+            quantity: 1,
+            price_data: {
+              currency: "eur",
+              unit_amount: cents,
+              product_data: {
+                name: `Commande OUTLAW #${order.orderNumber}`,
+                description: lines
+                  .map((line) => `${line.title} × ${line.quantity}`)
+                  .join(", ")
+                  .slice(0, 400),
+              },
             },
           },
-        },
-      ],
-    });
+        ],
+      });
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Paiement Stripe impossible";
+      throw new Error(message);
+    }
 
     await sql`
       update orders

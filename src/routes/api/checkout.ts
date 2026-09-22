@@ -33,12 +33,14 @@ export const Route = createFileRoute("/api/checkout")({
                   : requestOrigin(request),
             },
           });
-          return Response.json(result);
+          return Response.json(result, {
+            headers: { "cache-control": "no-store" },
+          });
         } catch (err) {
-          return Response.json(
-            { error: err instanceof Error ? err.message : "Paiement impossible" },
-            { status: 400 },
-          );
+          const message =
+            err instanceof Error ? err.message : "Paiement impossible";
+          const status = message.includes("STRIPE_SECRET_KEY") ? 503 : 400;
+          return Response.json({ error: message }, { status });
         }
       },
     },
