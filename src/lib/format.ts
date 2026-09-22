@@ -88,7 +88,12 @@ export function formatRegisteredAt(value: unknown) {
 export function eventOccursAt(eventDate: unknown, eventTime?: unknown): Date {
   const day = asDay(eventDate);
   const clock = asClock(eventTime);
-  return new Date(`${day}T${clock}:00`);
+  const utc = new Date(`${day}T${clock}:00.000Z`);
+  if (Number.isNaN(utc.getTime())) return utc;
+  const asParis = new Date(
+    utc.toLocaleString("en-US", { timeZone: "Europe/Paris" }),
+  );
+  return new Date(utc.getTime() + (utc.getTime() - asParis.getTime()));
 }
 
 export function isEventPast(eventDate: unknown, eventTime?: unknown): boolean {
