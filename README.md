@@ -25,6 +25,8 @@ Vercel. Variables serveur (jamais dans le code) :
 - `STRIPE_WEBHOOK_SECRET` — `whsec_…`
 - `CRON_SECRET` — Bearer pour `/api/cron/reminders`
 - `RESEND_API_KEY` / `RESEND_FROM`
+- `ADMIN_IDENTIFIER` / `ADMIN_PASSWORD` — identifiants de `/admin`
+- `ADMIN_SESSION_SECRET` — secret aléatoire pour signer les sessions admin (recommandé)
 
 Schéma : `migrations/*.sql`, appliqué au build via `npm run db:migrate` (pas Prisma).
 
